@@ -25,21 +25,22 @@ try:
         age_categories = ['younger_18', '18-45', '45-70', 'older_70']
         for category in age_categories:
             ws = wb.create_sheet(title=category)
-            ws.append(['№', 'Прізвище', 'Ім’я', 'Дата народження', 'Вік'])
+            ws.append(['№', 'Прізвище', 'Ім’я', 'По-батькові', 'Дата народження', 'Вік'])
 
         # Записуємо заголовок на аркуш "all"
-        all_headers = ['№', 'Прізвище', 'Ім’я', 'Дата народження', 'Вік']
+        all_headers = ['№', 'Прізвище', 'Ім’я', 'По-батькові', 'Дата народження', 'Вік']
         ws_all.append(all_headers)
 
         # Додавання данних на аркуш "all" і відповідні аркуші за категоріями віку
         for idx, row in enumerate(reader, start=1):
             surname = row['Surname']
             name = row['Name']
+            father_name = row['Father`s name']
             birthdate = row['Data of birth']
             age = datetime.date.today().year - datetime.datetime.strptime(birthdate, '%Y-%m-%d').year
 
             # Записуємо дані на аркуш "all"
-            ws_all.append([idx, surname, name, birthdate, age])
+            ws_all.append([idx, surname, name, father_name, birthdate, age])
 
             # Додавання даних на відповідні аркуші за категоріями віку
             if age < 18:

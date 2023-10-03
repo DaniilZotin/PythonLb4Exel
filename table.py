@@ -6,6 +6,48 @@ import datetime
 # Ініціалізуємо генератор випадкових даних
 fake = Faker()
 
+def generate_name_surname(gender):
+    if(gender == 'Male'):
+        male_surnames = [
+            "Smith","Johnson","Brown","Davis","Wilson","Jones","Miller","Taylor",
+            "Anderson","Thomas","Jackson","White","Harris","Martin","Thompson"
+        ]
+        male_names = [
+            "James","John","Robert","Michael","William","David","Richard","Joseph",
+            "Charles","Thomas","Daniel","Matthew","Anthony","Donald","Paul"
+        ]
+        surname = random.choice(male_surnames)
+        name = random.choice(male_names)
+        return surname, name
+    else:
+        female_first_names = [
+            "Mary","Jennifer","Linda","Patricia","Elizabeth","Susan","Jessica",
+            "Sarah","Karen","Nancy","Lisa","Margaret","Betty","Dorothy","Sandra"
+        ]
+
+        female_last_names = [
+            "Smith","Johnson","Brown","Davis","Wilson","Jones","Miller","Taylor",
+            "Anderson","Thomas","Jackson","White","Harris","Martin","Thompson"
+        ]
+        surname = random.choice(female_last_names)
+        name = random.choice(female_first_names)
+        return surname, name
+
+
+def generate_by_gender_the_father_name(gender):
+    if(gender == 'Male'):
+        father_name = [
+            "Mykolayovych","Volodymyrovych","Oleksandrovych","Ivanovych",
+            "Vasyliovych","Serhiyovych","Viktorovych","Mykhailovych"
+        ]
+        return random.choice(father_name)
+    else:
+        father_name = [
+            "Mykolaivna","Volodymyrivna","Olexandrivna","Ivanivna",
+            "Vasylivna","Serhiivna","Viktorivna","Mykhailivna"
+        ]
+        return random.choice(father_name)
+
 # Функція для генерації випадкової дати народження
 def generate_birthdate():
     start_date = datetime.date(1938, 1, 1)
@@ -14,7 +56,7 @@ def generate_birthdate():
 
 # Відкриваємо файл для запису з вказанням кодування
 with open('employees.csv', 'w', newline='', encoding='utf-8') as csvfile:
-    fieldnames = ['Surname', 'Name', 'Gender', 'Data of birth', 'Position', 'Place', 'Address',
+    fieldnames = ['Surname', 'Name', 'Father`s name', 'Gender', 'Data of birth', 'Position', 'Place', 'Address',
                   'Telephone', 'Email']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
@@ -29,12 +71,12 @@ with open('employees.csv', 'w', newline='', encoding='utf-8') as csvfile:
     # Генеруємо записи
     for i in range(total_records):
         gender = 'Male' if random.random() < male_percentage else 'Female'
-        surname = fake.last_name()
-        name = fake.first_name()
+        surname, name = generate_name_surname(gender)
 
         writer.writerow({
             'Surname': surname,
             'Name': name,
+            'Father`s name': generate_by_gender_the_father_name(gender),
             'Gender': gender,
             'Data of birth': generate_birthdate(),
             'Position': fake.job(),
